@@ -14,8 +14,10 @@ mdc: true
 
 and its applications in object recognition.
 
+Interactive slide: https://second-last.github.io/math1060-fvt
+
 ---
-display: false
+hide: true
 ---
 
 # Volunteers?
@@ -144,15 +146,37 @@ systematic way to reduce many vertices down to four.
 
 # Curvature Scale Space (CSS)
 
-High level: keep smoothing until you have four vertices left!
+CSS Representation: multi-scale organization of the invariant
+geometric features (either curvature extremas or zero-crossing
+points).
 
 ![](./images/panda-curvature-graph.png)
 
-Precisely: CSS tracks 
+The CSS graph is (implicityly) defined by $\kappa(\sigma, u) = 0$,
+y-axis $\sigma$ as smoothing level, x-axis $u$ as arc length.
+
+---
+
+# The Full Object Comparison Algorithm
+
+1. Extract contour (i.e. boundary).
+2. Compute the CSS graph shown below by smoothing the curve until there are four extremas
+   left.
+3. Use some algorithm to compare the four extremas. There are many
+   creative algorithms you can choose that we won't elaborate on here.
+
+TODO: explain the CSS graph a bit more, since this example in the
+paper uses
+zero-crossing points and not extremas. Maybe we should create our own
+graph.
+
+![](./images/panda-curvature-graph.png){width=500px}
 
 ---
 
 # CSS Demo
+
+High level: keep smoothing until you have four vertices left!
 
 \<show, best case sliders with smoothing parameters, worst case GIFs,
 of the smoothing of the boundaries of different objects with all
@@ -178,17 +202,7 @@ of the shape and become the "signature" of the shape.
 
 ---
 
-# The Full Object Comparison Algorithm
-
-1. Extract contour (i.e. boundary).
-2. Compute CSS by smoothing the curve until there are four extremas
-   left.
-3. Use some algorithm to compare the four extremas. There are many
-   creative algorithms you can choose that we won't elaborate on here.
-
----
-
-# Tieing up
+# To Sum Up
 
 - The Four Vertex Theorem tells us that shapes fundamentally have at
   least 4 curvature extrema.
@@ -196,8 +210,7 @@ of the shape and become the "signature" of the shape.
 - This is an intrinsic property of the shape.
 
 - While FVT itself isn't used in the recognition algorithm, it
-  motivates why curvature-based methods like CSS are effective.
+  motivates why curvature-based methods like CSS are effective at
+  using a small number of data points to describe complex curves.
 
 ---
-
-

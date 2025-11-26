@@ -14,7 +14,7 @@ mdc: true
 
 and its applications in object recognition.
 
-Interactive slide: https://second-last.github.io/math1060-fvt
+Interactive slide (recommended): https://second-last.github.io/math1060-fvt
 
 ---
 hide: true
@@ -92,8 +92,7 @@ The answer was revealed at the start...
 
 - **Boundary:** a simple, closed, smooth plane curve $\alpha(t)$.
 
-- **Vertex:** A certain $t$ where the curvature at this $t$ is a local
-  extrema.
+- **Vertex:** A certain $t$ where $\kappa'(t) = 0$
 
 ## Statement
 
@@ -130,6 +129,19 @@ complex, let's turn it into an ellipse.
 ---
 
 # Proof Idea
+
+<!-- "The essence of the proof may be distilled in a single phrase: -->
+<!-- consider the circumscribed circle." - Robert Osserman, 1985 -->
+
+* For the sake of contradiction, assume curve $\alpha$ has only **two vertices**, $p$ and $q$ (a maximum and a minimum for the curvature $k(s)$).
+    * The curve is split into two arcs, $\beta$ and $\gamma$, by the points $p$ and $q$.
+* A straight line $L$ is drawn through the two assumed vertices, $p$ and $q$.
+    * The convexity of the curve implies that each of the arcs ($\beta$ and $\gamma$) must lie on a **definite side** of the line $L$.
+* Contradiction: A specific integral (Eq. 5 in the text) involving $k'(s)$ is used to show that if $\alpha$ has only two vertices, $k'(s)$ must change sign twice on at least one of the arcs ($\beta$ or $\gamma$).
+    * Two sign changes for $k'(s)$ on an arc, between the maximum and minimum, means there must be **two additional zeros** for $k'(s)$ on that arc.
+    * This forces the existence of a **third and a fourth vertex**, contradicting the initial assumption of only two. 
+
+TODO: draw a diagram that shows such $\beta$, $\gamma$, and $L$.
 
 ---
 

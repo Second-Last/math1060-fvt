@@ -30,6 +30,10 @@ helps us differentiate between an image of Gavin versus an image of
 someone else purely based on boundaries.
 
 ---
+src: ./pages/intro.md
+---
+
+---
 layout: two-cols-header
 layoutClass: gap-x-4
 mdc: true
@@ -37,7 +41,7 @@ mdc: true
 
 # Motivation
 
-How do we compare objects?
+How do we distinguish objects?
 
 ::left::
 
@@ -199,18 +203,10 @@ smoothing removes extremas>
 
 ---
 
-# How FVT is involved
+# How FVT helps CSS
 
 FVT guarantees the fundamental structure that we'll eventually
 approach 4 extremas before becoming circular.
-
-\<an animation, ideally a slider for smoothness,
-worst case a gif, showing how
-the minor extremas
-merge and major extremas persist as we smooth the curve>
-
-The four extremas that survive at the end are the persistent features
-of the shape and become the "signature" of the shape.
 
 ---
 
@@ -225,4 +221,56 @@ of the shape and become the "signature" of the shape.
   motivates why curvature-based methods like CSS are effective at
   using a small number of data points to describe complex curves.
 
+---
+
+1. (5 mins) Core of differential geometry: mapping from local to global.
+    - Think about all the theorems we've learned up to Guass-Bonnet: they're local. **EXTREMELY IMPORTANT:** check this is true! Otherwise it will be embarassing.
+    - Go through some examples: Fundi Plane/Space Curve, FFF/SFF, Theorem egregium, why they're local.
+    - What's the first theorem in diff geo that's describing global results from purely local observations?
+    - It's so old it's **almost** algorithmically useless, more on this later.
+2. (10 mins) Book proof: FVT convex case.
+3. (5 mins) Not _exactly_ useless: connects curvature extremas to shape properties. Intuitively, by knowing where and what are the curvature extremas, we can get some guarantees no what the shape would look like.
+    - FVT is a simple guarantee, but it does provide the motivation to study curvature extremas since extremas are always available.
+    - Further studies show that curvature extremas do matter.
+    - FVT tells us any simple, ..., curve has those extremas, allowing us to apply the extrema results to any such curve.
+    - e.g. object recognition, how do you know a computer is a computer? Note that object recognition is also mapping from local observations to global conclusions!
+
+
+<!--
+4. Circle back: how does FVT helps CSS?
+    - Not alogrithmically useful.
+    - FVT provides a lower bound and removes the trivial case of having no extremas.
+-->
+
+<!-- What is differential geometry? How do we map from local to global. Most of the stuff we have learned _prior to Gauss Bonnet_ are focusing on local stuff. List them. -->
+
+<!--
+1. Motivation: CSS representation, uses curvature extremas to compare boundaries under rigid motion and noise.
+     - It takes curvature extremas, computationally heavy and noisy.
+     - We want to reduce the number of extremas we need. What's the minimum?
+     - Reuse our current introduction.
+-->
+
+<!--
+1. Motivation: CSS representation, uses curvature extremas to compare boundaries under rigid motion and noise.
+     - It takes curvature extremas, computationally heavy and noisy.
+     - We want to reduce the number of extremas we need. What's the minimum?
+     - Reuse our current introduction.
+-->
+
+---
+
+Curvature extremas are useful!
+
+- Mokhtarian et al. use the maxima of absolute curvature on the CSS image to detect and track corners
+- Garcia & de Luna using extrema set for ship-silhouette recognition achieves SOTA stability when part of the outline is noisy.
+- Our CSS paper!
+- More...
+
+Because of FVT, we know we can use these results on any simple, ..., curve!
+
+FVT provides motivation to study curvature extremas for CV.
+
+---
+src: ./pages/outro.md
 ---

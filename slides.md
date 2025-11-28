@@ -223,11 +223,11 @@ approach 4 extremas before becoming circular.
 
 ---
 
-1. (5 mins) Core of differential geometry: mapping from local to global.
-    - Think about all the theorems we've learned up to Guass-Bonnet: they're local. **EXTREMELY IMPORTANT:** check this is true! Otherwise it will be embarassing.
-    - Go through some examples: Fundi Plane/Space Curve, FFF/SFF, Theorem egregium, why they're local.
-    - What's the first theorem in diff geo that's describing global results from purely local observations?
-    - It's so old it's **almost** algorithmically useless, more on this later.
+1. (5 mins) Core of (global) differential geometry: mapping from local to global.
+    - Guass-Bonnet started **global** differential geometry; **global** diff geo studies how local <-> global.
+     - But Guass-Bonnet is for surfaces. Go through some theorems we learned about _curves_ and note that none of them establish local <-> global relationship.
+     - What's the first theorem in diff geo about _curves_ that's describing global results from purely local observations? FVT!
+     - It's so old it's **almost** algorithmically useless, more on this later.
 2. (10 mins) Book proof: FVT convex case.
 3. (5 mins) Not _exactly_ useless: connects curvature extremas to shape properties. Intuitively, by knowing where and what are the curvature extremas, we can get some guarantees no what the shape would look like.
     - FVT is a simple guarantee, but it does provide the motivation to study curvature extremas since extremas are always available.

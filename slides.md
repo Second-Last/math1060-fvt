@@ -41,20 +41,98 @@ mdc: true
 
 # Motivation
 
-How do we distinguish objects?
+How do we recognize an object from a bank of objects in another image?
 
 ::left::
 
-![](./images/monitor.webp){width=300px}
+![](./images/bank.png)
 
 ::right::
 
-![](./images/mouse.png){width=300px}
+<!-- TODO(gz): this image is not -->
+![](./images/cluttered.png)
 
-::bottom::
+Is a fork (I) in this image? 
 
-Human intuition: <span v-mark.underline.orange>boundaries -> vertices</span> based. A monitor has 4 vertices, while
-a mouse has no sharp corners on its boundary.
+<!--
+
+Let's say we have a bank of objects as boundaries. Then, you're given the
+boundaries of an image with many such objects, possibly overlaying each other.
+The problem you're asked is, how do you know a given object, say (I) fork, is in
+the image or not, based purely on the boundaries?
+
+Eventually we'll do this algorithmically. But for now, think about how as
+humans, we would approach this problem. Let's take the fork example. In our
+brains, we see the four pointy feets of the fork, so we can claim with pretty
+high confidence that a fork is indeed in the image.
+
+Now, what abot a panda (C)? One common way to do this in your brain,
+is to recognize the
+little rounded ears and hands of a panda. Then, scan in the image to see if we
+can find any such rounded corners. From a cursory scan, it doesn't look like it.
+
+Similarly, what about a spoon (E)? Here, we recognize the big rounded end of a
+spoon attached to a straight
+handle. We not only find a match of the rounded end, but
+also determine that there's a handle to it as well, so we can reasonably
+confidently conclude that there is a spoon as well.
+
+Spoon vs. Key for parts of the motivation?
+-->
+
+---
+
+# Collecting Our Intuition
+
+Note that, in our brains, while trying to recognize objects based on boundaries,
+we tried to use the following features of the objects:
+
+- **pointy** feets
+- **rounded** ears
+- **straight** handle
+
+Curvature!
+
+---
+
+# Signed Curvature
+
+(considering only plane curves)
+
+A plane curve parameterized by its arc length $c : [0, 1] \rightarrow \mathbb{R}^2$.
+Let $c(u) = (x(u), y(u))$.
+
+Then, we've learned in class that for a arc-length parameterized curve, its
+curvature is defined by $\kappa(u) = |c''(u)|$.
+
+Here however, we need to recognize the direction of bending to differentiate
+contex and concave curves,
+so the curvature
+must be **signed**. To do so, we need to expand out the general formula of the
+curvature in 3D:
+
+$$
+\kappa(u) = \frac{|c'(u) \times c''(u)|}{|c'(u)|^3}
+= \frac{|x'(u) y''(u) - y'(u) x''(u)|}{(x'(u)^2 + y'(u)^2)^{1.5}}
+$$
+
+and just drop the absolute value sign of the denominator
+
+$$
+\kappa(u) 
+= \frac{x'(u) y''(u) - y'(u) x''(u)}{(x'(u)^2 + y'(u)^2)^{1.5}}
+$$
+
+---
+
+# Smoothing
+
+TBD. What formula are we using?
+
+---
+
+# Curvature Scale Space Graph
+
 
 ---
 

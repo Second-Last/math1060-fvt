@@ -30,6 +30,7 @@ helps us differentiate between an image of Gavin versus an image of
 someone else purely based on boundaries.
 
 ---
+hide: true
 src: ./pages/intro.md
 ---
 
@@ -91,11 +92,33 @@ we tried to use the following features of the objects:
 - **rounded** ears
 - **straight** handle
 
-Curvature!
+These are all quantities that relate to curvature!
+
+- pointy -> curvature has a local extrema
+- rounded -> curvature is pretty small
+- straight handle -> curvature is 0
+
+**Local extremas** and **zero-crossings** of curvatures seem like good
+candidates for _identifiers/signatures_ of boundaries.
 
 ---
 
-# Signed Curvature
+# Challenge #1: Being Less Volatile
+
+Just knowing the what and where local extremas and zero-crossings are not
+enough.
+
+For example, if we use a (coordinate, value) pair to store zero-crossings, a
+simple rigid motion would cause the same object to have
+
+Solution: parameterize our curve by arc length and normalize the domain to $[0,
+1]$.
+
+TODO: slightly better explanation.
+
+---
+
+# Challenge #2: Signed Curvature
 
 (considering only plane curves)
 
@@ -127,13 +150,58 @@ $$
 
 # Smoothing
 
-TBD. What formula are we using?
+TBD. ~~What formula are we using?~~ Ok it's Gaussian.
 
 ---
 
-# Curvature Scale Space Graph
+# Curvature Scale Space (CSS)
 
+For some reason, everyone uses zero-crossings.
 
+Formally, a CSS representation of a space curve is the set of points $(u,
+\sigma)$ where $\kappa_\sigma(u) = 0$ holds, where $\kappa_\sigma$ is the signed
+curvature of the curve after being gaussian-smoothed with parameter $\sigma$.
+
+TODO: show image
+
+---
+
+# Claim: CSS Is A Signature of A Curve
+
+w.r.t to ___
+
+Recall the Fundamental Theorem of Curves: every regular curve with non-zero
+curvature has its shape completely determined by its curvature.
+
+CSS to Computer Vision is what FTC is to Differential Geometry.
+
+---
+
+# "Proof"
+
+...since our claim is not a really a provable theorem anyway.
+
+In terms of computer vision,
+in terms of object recognition, there are several scenarios we
+want our signature to be resiliant to:
+
+- Rigid motion
+- Scaling
+- Noise
+
+TODO: put examples of the same fish, but rotated, scaled, and slightly
+noise-ified (maybe blurred)?
+
+---
+
+# Returning to the Initial Question
+
+How do we recognize an object from a bank in a sea of contours?
+
+TODO: Show actual object recognition example.
+
+---
+hide: true
 ---
 
 # Challenge
@@ -154,6 +222,8 @@ shape.
 </v-clicks>
 
 ---
+hide: true
+---
 
 # Key Question
 
@@ -162,6 +232,8 @@ What's the minimum structural complexity of a boundary?
 Or: how many vertices can we throw away until we can't reliably
 recognize anything?
 
+---
+hide: true
 ---
 
 # Four Vertex Theorem
@@ -188,6 +260,8 @@ A simple, closed, smooth plane curve has <span v-mark.underline.orange>at least 
 </v-clicks>
 
 ---
+hide: true
+---
 
 # Intuition on the 4
 
@@ -209,6 +283,8 @@ complex, let's turn it into an ellipse.
 </v-clicks>
 
 ---
+hide: true
+---
 
 # Proof Idea
 
@@ -226,6 +302,8 @@ complex, let's turn it into an ellipse.
 TODO: draw a diagram that shows such $\beta$, $\gamma$, and $L$.
 
 ---
+hide: true
+---
 
 # What the 4 doing?
 
@@ -236,6 +314,8 @@ Real object has way more than four vertices!
 Now we know that the minimum we need is four vertices, we need a
 systematic way to reduce many vertices down to four.
 
+---
+hide: true
 ---
 
 # Curvature Scale Space (CSS)
@@ -249,6 +329,8 @@ points).
 The CSS graph is (implicityly) defined by $\kappa(\sigma, u) = 0$,
 y-axis $\sigma$ as smoothing level, x-axis $u$ as arc length.
 
+---
+hide: true
 ---
 
 # The Full Object Comparison Algorithm
@@ -267,6 +349,8 @@ graph.
 ![](./images/panda-curvature-graph.png){width=500px}
 
 ---
+hide: true
+---
 
 # CSS Demo
 
@@ -280,12 +364,16 @@ smoothing removes extremas>
 ![](./images/css-sequence.png)
 
 ---
+hide: true
+---
 
 # How FVT helps CSS
 
 FVT guarantees the fundamental structure that we'll eventually
 approach 4 extremas before becoming circular.
 
+---
+hide: true
 ---
 
 # To Sum Up

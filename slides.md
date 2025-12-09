@@ -37,120 +37,293 @@ src: ./pages/intro.md
 ---
 layout: two-cols-header
 layoutClass: gap-x-4
-mdc: true
 ---
 
 # Motivation
 
-How do we recognize an object from a bank of objects in another image?
+<div v-click="1">
 
-::left::
+Given an input image and knowledge of many object images...
 
-![](./images/bank.png)
+</div>
 
-::right::
+<div 
+  v-if="$clicks >= 2"
+  :class="$clicks >= 3 ? 'scaled-moved-db' : 'centered-large-db'"
+  class="image-transition-db"
+>
+  <img src="./images/database_ex.jpg" alt="database example" />
+</div>
 
-<!-- TODO(gz): this image is not -->
-![](./images/cluttered.png)
+<div v-click="3">
 
-Is a fork (I) in this image? 
+**...how do we recognize what the input image is?**
+
+</div>
+
+<div v-click="4">
+
+What's is this object?
+
+</div>
+
+<div 
+  v-if="$clicks >= 5"
+  :class="$clicks >= 6 ? 'scaled-moved' : 'centered-large'"
+  class="image-transition"
+>
+  <img src="./images/forkd.png" alt="fork image" />
+</div>
 
 <!--
-
-Let's say we have a bank of objects as boundaries. Then, you're given the
-boundaries of an image with many such objects, possibly overlaying each other.
-The problem you're asked is, how do you know a given object, say (I) fork, is in
-the image or not, based purely on the boundaries?
-
-Eventually we'll do this algorithmically. But for now, think about how as
-humans, we would approach this problem. Let's take the fork example. In our
-brains, we see the four pointy feets of the fork, so we can claim with pretty
-high confidence that a fork is indeed in the image.
-
-Now, what abot a panda (C)? One common way to do this in your brain,
-is to recognize the
-little rounded ears and hands of a panda. Then, scan in the image to see if we
-can find any such rounded corners. From a cursory scan, it doesn't look like it.
-
-Similarly, what about a spoon (E)? Here, we recognize the big rounded end of a
-spoon attached to a straight
-handle. We not only find a match of the rounded end, but
-also determine that there's a handle to it as well, so we can reasonably
-confidently conclude that there is a spoon as well.
-
-Spoon vs. Key for parts of the motivation?
+#It's a fork, yes. We know that because we have human brain. But as computer, where do we look at to understand, and recognize it's a fork?
 -->
 
+<div v-click="7">
+
+**One natural approach:** As we study differential geometry, let's look at **curves**!
+
+</div>
+
+<div v-click="8">
+
+**A natural curve to examine:** The object's **boundary**
+
+</div>
+
+<div v-click="9">
+
+
+
+</div>
+
+<div 
+  v-if="$clicks >= 9"
+  :class="$clicks >= 10 ? 'scaled-moved2' : 'centered-large2'"
+  class="image-transition2"
+  v-click="[9,10]"
+>
+  <img src="./images/canny_edges.jpg" alt="fork boundary" />
+</div>
+
+<div v-click="11">
+
+Nice! But, what now?
+
+</div>
+
+<style scoped>
+.image-transition {
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.image-transition2 {
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.5, 1);
+}
+.image-transition-db {
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.centered-large {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.85);
+  z-index: 10;
+}
+.centered-large2 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.85);
+  z-index: 10;
+}
+.centered-large-db {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.6);
+  z-index: 10;
+}
+
+.scaled-moved {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(calc(25vw - 80%), calc(25vh - 80%)) scale(0.3);
+  z-index: 1;
+}
+
+.scaled-moved2 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(calc(35vw - 80%), calc(25vh - 80%)) scale(0.3);
+  z-index: 1;
+}
+
+.scaled-moved-db {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(calc(-5vw - 50%), calc(25vh - 50%)) scale(0.65);
+  z-index: 1;
+}
+
+.scaled-moved img {
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.scaled-moved-db img {
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.scaled-moved img2 {
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+</style>
 ---
 
 # Collecting Our Intuition
 
-Note that, in our brains, while trying to recognize objects based on boundaries,
-we tried to use the following features of the objects:
+<div v-click="1">
+Looking at the fork boundary, how do we identify distinctive features?
+</div>
 
-- **pointy** feets
-- **rounded** ears
-- **straight** handle
+<div v-click="2">
+In our minds, we naturally focus on:
 
-These are all quantities that relate to curvature!
+- **Pointy** prongs → high curvature with local extrema
+- **Rounded** curves → moderate curvature values
+- **Straight** edges → curvature near zero
+</div>
 
-- pointy -> curvature has a local extrema
-- rounded -> curvature is pretty small
-- straight handle -> curvature is 0
+<div v-click="3">
 
-**Local extremas** and **zero-crossings** of curvatures seem like good
-candidates for _identifiers/signatures_ of boundaries.
+All of these observations relate to **curvature**!
+</div>
+
+<div v-click="4">
+
+More precisely:
+- Pointy features → curvature has **local extrema**
+- Rounded features → curvature is relatively **small**
+- Straight features → curvature is **≈ 0**
+</div>
+
+<div v-click="5">
+
+**Key insight:** Local extrema and zero-crossings of curvature serve as reliable **signatures** for identifying object boundaries.
+</div>
+---
+
+# Challenge #1: Invariance to Transformations
+
+Using curvature features is promising, but we need them to be **robust** to common image transformations.
+
+**The problem:** If we store curvature extrema as $(x, y, \kappa)$ coordinates:
+- Rotating the fork → all $(x, y)$ coordinates change
+- Translating the fork → all $(x, y)$ coordinates change
+- The **same object** would have **different signatures**!
+
+**The solution:** Make our representation **invariant** to rigid motions:
+
+1. **Parameterize by arc length** $s$ instead of $(x, y)$ coordinates
+2. **Normalize the domain** to $[0, 1]$ (scale-invariant)
+
+Now the same fork always has the same signature, regardless of position, rotation, or scale!
 
 ---
 
-# Challenge #1: Being Less Volatile
+# Challenge #2: Distinguishing Convex from Concave
 
-Just knowing the what and where local extremas and zero-crossings are not
-enough.
+For object recognition, we need to tell apart curves that bend **inward** vs **outward**.
 
-For example, if we use a (coordinate, value) pair to store zero-crossings, a
-simple rigid motion would cause the same object to have
+**The problem:** Standard curvature $\kappa(u) = |c''(u)|$ we learnt in class is always **positive** — it only tells us *how much* a curve bends, not *which direction*.
 
-Solution: parameterize our curve by arc length and normalize the domain to $[0,
-1]$.
+**The solution:** Use **signed curvature** to capture the direction of bending.
 
-TODO: slightly better explanation.
+Starting with the general curvature formula for plane curves $c(u) = (x(u), y(u))$:
+
+$$
+\kappa = \frac{|c'(u) \times c''(u)|}{|c'(u)|^3}
+= \frac{|x'(u) y''(u) - y'(u) x''(u)|}{(x'(u)^2 + y'(u)^2)^{3/2}}
+$$
+
+**Remove the absolute value** in the numerator to get signed curvature:
+
+$$
+\kappa_{\text{signed}}(u) 
+= \frac{x'(u) y''(u) - y'(u) x''(u)}{(x'(u)^2 + y'(u)^2)^{3/2}}
+$$
+
+Now: **positive** = bending left (convex), **negative** = bending right (concave).
 
 ---
 
-# Challenge #2: Signed Curvature
+# Challenge #3: Dealing with Noise and Multiple Scales
 
-(considering only plane curves)
+This isn't the perfect world of MA1060 anymore :( Noise is everywhere!
 
-A plane curve parameterized by its arc length $c : [0, 1] \rightarrow \mathbb{R}^2$.
-Let $c(u) = (x(u), y(u))$.
+Say you're taking a picture with a crappy camera, and your hand is shaking a lot. You might get a pretty unsatisfying input picture. What do we do to de-noise it?
 
-Then, we've learned in class that for a arc-length parameterized curve, its
-curvature is defined by $\kappa(u) = |c''(u)|$.
+One classic approach in Computer Vision is to apply a smoothing filter. **Gaussian filter** is a popular choice.
 
-Here however, we need to recognize the direction of bending to differentiate
-contex and concave curves,
-so the curvature
-must be **signed**. To do so, we need to expand out the general formula of the
-curvature in 3D:
+$$g_\sigma(x, y) = \frac{1}{2\pi\sigma^2}e^{-(x^2+y^2)/(2\sigma^2)}$$ 
 
-$$
-\kappa(u) = \frac{|c'(u) \times c''(u)|}{|c'(u)|^3}
-= \frac{|x'(u) y''(u) - y'(u) x''(u)|}{(x'(u)^2 + y'(u)^2)^{1.5}}
-$$
+where $\sigma$ is the standard deviation.
 
-and just drop the absolute value sign of the denominator
-
-$$
-\kappa(u) 
-= \frac{x'(u) y''(u) - y'(u) x''(u)}{(x'(u)^2 + y'(u)^2)^{1.5}}
-$$
+<img src="./images/gaussian_filter_sigma_5.0.png" style="width: 80%; height: auto;" />
 
 ---
 
-# Smoothing
+# Gaussian Smoothing: Multi-Scale View
 
-TBD. ~~What formula are we using?~~ Ok it's Gaussian.
+**Key insight:** As $\sigma$ increases, the curve becomes smoother:
+- Small noise → eliminated at low $\sigma$
+- Fine details → disappear at moderate $\sigma$  
+- Essential shape → persists until high $\sigma$
+
+<div style="text-align: center; margin-top: 2rem;">
+
+**What smoothing an image looks like:**
+
+<div style="display: flex; align-items: center; justify-content: center; gap: 1.5rem; margin-top: 1rem;">
+  <img src="./images/Missy.JPG" style="width: 30%; height: auto;" />
+  <div style="display: flex; flex-direction: column; align-items: center;">
+    <img src="./images/onlyG.png" style="width: 100px; height: auto; margin-bottom: 0.5rem;" />
+    <div style="font-size: 2.5rem;">→</div>
+  </div>
+  <img src="./images/blurred_sigma_5.0.jpg" style="width: 30%; height: auto;" />
+</div>
+
+</div>
+
+---
+
+# Applying Smoothing to Curves
+
+Let's do some MA1060!
+
+For smoothing a curve, we can think of it as **evolving the curve** through a family of increasingly "regular" versions:
+
+$$\gamma_\sigma(u) = \gamma(u) \otimes g_\sigma(u)$$
+
+<div style="text-align: center; margin-top: 2rem;">
+
+**What smoothing a curve looks like:**
+
+<div style="display: flex; align-items: center; justify-content: center; gap: 1.5rem; margin-top: 1rem;">
+  <img src="./images/frame_0000.png" style="width: 30%; height: auto;" />
+  <div style="display: flex; flex-direction: column; align-items: center;">
+    <img src="./images/onlyG.png" style="width: 100px; height: auto; margin-bottom: 0.5rem;" />
+    <div style="font-size: 2.5rem;">→</div>
+  </div>
+  <img src="./images/frame_0008.png" style="width: 30%; height: auto;" />
+</div>
+</div>
 
 ---
 

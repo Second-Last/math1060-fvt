@@ -1,7 +1,7 @@
 ---
 theme: seriph
 background: https://cover.sli.dev
-title: Four Vertex Theorem
+title: Curvature
 info: |
   Presentation slides for Four Vertex Theorem and its application in CSS.
 # https://sli.dev/features/drawing
@@ -10,11 +10,11 @@ drawings:
 mdc: true
 ---
 
-# Four Vertex Theorem
+# Curvature Scale Space representation
 
 and its applications in object recognition.
 
-Interactive slide (recommended): https://second-last.github.io/math1060-fvt
+Presented by Jue Han, Gavin Zhao
 
 ---
 hide: true
@@ -43,13 +43,13 @@ layoutClass: gap-x-4
 
 <div v-click="1">
 
-Given an input image and knowledge of many object images...
+Given the knowledge of many object images...
 
 </div>
 
 <div 
-  v-if="$clicks >= 2"
-  :class="$clicks >= 3 ? 'scaled-moved-db' : 'centered-large-db'"
+  v-if="$clicks >= 1"
+  :class="$clicks >= 2 ? 'scaled-moved-db' : 'centered-large-db'"
   class="image-transition-db"
 >
   <img src="./images/database_ex.jpg" alt="database example" />
@@ -57,13 +57,15 @@ Given an input image and knowledge of many object images...
 
 <div v-click="3">
 
-**...how do we recognize what the input image is?**
+And also an input image...**how do we recognize what the input image is?**
 
 </div>
 
 <div v-click="4">
 
-What's is this object?
+<span v-if="$clicks < 5">What is this object?</span>
+<span v-else-if="$clicks >= 5 && $clicks < 6">What is this object?</span>
+<span v-else>What is this object? <span class="text-gray-500">a fork, duh</span></span>
 
 </div>
 
@@ -75,38 +77,36 @@ What's is this object?
   <img src="./images/forkd.png" alt="fork image" />
 </div>
 
-<!--
-#It's a fork, yes. We know that because we have human brain. But as computer, where do we look at to understand, and recognize it's a fork?
--->
+<div v-click="7" class="text-sm mt-4">
 
-<div v-click="7">
-
-**One natural approach:** As we study differential geometry, let's look at **curves**!
+We recognize it instantly with our human brain. But as a computer, **where do we look** to understand and recognize it's a fork?
 
 </div>
 
 <div v-click="8">
 
-**A natural curve to examine:** The object's **boundary**
+**One natural approach:** As we study differential geometry, let's look at **curves**!
 
 </div>
 
 <div v-click="9">
 
-
+**A natural curve to examine:** The object's **boundary**
 
 </div>
 
+
+
 <div 
-  v-if="$clicks >= 9"
-  :class="$clicks >= 10 ? 'scaled-moved2' : 'centered-large2'"
+  v-if="$clicks >= 10"
+  :class="$clicks >= 11 ? 'scaled-moved2' : 'centered-large2'"
   class="image-transition2"
-  v-click="[9,10]"
+  v-click="[10,11]"
 >
   <img src="./images/canny_edges.jpg" alt="fork boundary" />
 </div>
 
-<div v-click="11">
+<div v-click="12">
 
 Nice! But, what now?
 
@@ -149,7 +149,7 @@ Nice! But, what now?
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(calc(25vw - 80%), calc(25vh - 80%)) scale(0.3);
+  transform: translate(calc(15vw - 80%), calc(25vh - 80%)) scale(0.3);
   z-index: 1;
 }
 
@@ -157,7 +157,7 @@ Nice! But, what now?
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(calc(35vw - 80%), calc(25vh - 80%)) scale(0.3);
+  transform: translate(calc(25vw - 80%), calc(25vh - 80%)) scale(0.3);
   z-index: 1;
 }
 
@@ -188,6 +188,10 @@ Nice! But, what now?
 
 # Collecting Our Intuition
 
+<div class="absolute top-20 right-10 w-80">
+  <img src="./images/canny_edges.jpg" alt="Canny edge detection" class="rounded shadow-lg" />
+</div>
+
 <div v-click="1">
 Looking at the fork boundary, how do we identify distinctive features?
 </div>
@@ -217,9 +221,15 @@ More precisely:
 
 **Key insight:** Local extrema and zero-crossings of curvature serve as reliable **signatures** for identifying object boundaries.
 </div>
+
+<div v-click="6">
+
+So let's just store every point with its curvautre and compare! ..Well
+</div>
+
 ---
 
-# Challenge #1: Invariance to Transformations
+# Challenge #1: Transformations Change Coordinates
 
 Using curvature features is promising, but we need them to be **robust** to common image transformations.
 
@@ -237,7 +247,7 @@ Now the same fork always has the same signature, regardless of position, rotatio
 
 ---
 
-# Challenge #2: Distinguishing Convex from Concave
+# Challenge #2: Standard Curvature Loses Direction Information
 
 For object recognition, we need to tell apart curves that bend **inward** vs **outward**.
 
@@ -263,7 +273,7 @@ Now: **positive** = bending left (convex), **negative** = bending right (concave
 
 ---
 
-# Challenge #3: Dealing with Noise and Multiple Scales
+# Challenge #3: Real-World Noise and Scale Variation
 
 This isn't the perfect world of MA1060 anymore :( Noise is everywhere!
 
@@ -329,34 +339,48 @@ $$\gamma_\sigma(u) = \gamma(u) \otimes g_\sigma(u)$$
 
 # Curvature Scale Space (CSS)
 
-For some reason, everyone uses zero-crossings.
+Now we track how curvature zero-crossings evolve as we smooth the curve.
 
-Formally, a CSS representation of a space curve is the set of points $(u,
-\sigma)$ where $\kappa_\sigma(u) = 0$ holds, where $\kappa_\sigma$ is the signed
-curvature of the curve after being gaussian-smoothed with parameter $\sigma$.
+**Formal definition:** The CSS representation of a plane curve $\gamma$ is the set:
 
-Essentially, we remember where do the zero-crossing occur on different smoothing
-levels.
+$$\text{CSS}(\gamma) = \{(u, \sigma) \in [0,1] \times \mathbb{R}^+ \mid \kappa_\sigma(u) = 0\}$$
+
+where:
+- $u \in [0,1]$ is the normalized arc-length parameter
+- $\sigma \in \mathbb{R}^+$ is the Gaussian smoothing scale
+- $\kappa_\sigma(u)$ is the signed curvature after smoothing with $g_\sigma$
+
+**As an image:** We can represent CSS as a binary matrix $M \in \{0,1\}^{n \times m}$ where:
+
+$$M_{ij} = \begin{cases} 
+1 & \text{if } \kappa_{\sigma_i}(u_j) = 0 \\
+0 & \text{otherwise}
+\end{cases}$$
+
+This $(u, \sigma)$-space "image" captures the curve's multi-scale geometric structure!
 
 <!-- Show the live demo of a fish and move the slider to some boundaries -->
 
 ---
 
-# Claim: CSS Is A Signature of A Curve
+# CSS as a Geometric Signature
 
-w.r.t to ___
+**Why is CSS a good signature for object boundaries?**
 
-Recall the Fundamental Theorem of Curves: every regular curve with non-zero
-curvature has its shape completely determined by its curvature.
+Think back to the Fundamental Theorem of Curves: a regular curve with non-zero curvature is completely determined by its curvature function.
 
-CSS to Computer Vision is what FTC is to Differential Geometry.
+CSS extends this idea to be **robust across transformations**:
+- **Invariant to** rigid motion, scaling (from our arc-length parameterization)
+- **Robust to** noise (through multi-scale smoothing)
+- **Captures** essential geometric features at different scales
+
+CSS for Computer Vision ≈ FTC for Differential Geometry — both tell us curvature determines shape!
 
 ---
 
-# "Proof" by Demonstration
+# Does CSS Really Work?
 
-Recall that there are several scenarios we
-want our signature to be resiliant to:
+Let's test if CSS signatures are resilient to the transformations we care about:
 
 - Rigid motion
 - Scaling

@@ -335,7 +335,10 @@ Formally, a CSS representation of a space curve is the set of points $(u,
 \sigma)$ where $\kappa_\sigma(u) = 0$ holds, where $\kappa_\sigma$ is the signed
 curvature of the curve after being gaussian-smoothed with parameter $\sigma$.
 
-TODO: show image
+Essentially, we remember where do the zero-crossing occur on different smoothing
+levels.
+
+<!-- Show the live demo of a fish and move the slider to some boundaries -->
 
 ---
 
@@ -350,28 +353,34 @@ CSS to Computer Vision is what FTC is to Differential Geometry.
 
 ---
 
-# "Proof"
+# "Proof" by Demonstration
 
-...since our claim is not a really a provable theorem anyway.
-
-In terms of computer vision,
-in terms of object recognition, there are several scenarios we
+Recall that there are several scenarios we
 want our signature to be resiliant to:
 
 - Rigid motion
 - Scaling
 - Noise
 
-TODO: put examples of the same fish, but rotated, scaled, and slightly
-noise-ified (maybe blurred)?
+Let's show (using examples) that in all three of the cases, the CSS image stays
+essentially unmodified!
+
+<!--
+If the files don't exist, can generate on the fly using `convert`.
+
+Prepared:
+- `Scissors_Rotated.jpeg`
+- `Panda_Shrunk.jpeg`
+- `Fork_Blurred.jpeg`
+-->
 
 ---
 
 # Returning to the Initial Question
 
-How do we recognize an object from a bank in a sea of contours?
+How do we recognize an object from a bank of objects?
 
-TODO: Show actual object recognition example.
+1. 
 
 ---
 hide: true
@@ -561,6 +570,8 @@ hide: true
   using a small number of data points to describe complex curves.
 
 ---
+hide: true
+---
 
 1. (5 mins) Core of (global) differential geometry: mapping from local to global.
     - Guass-Bonnet started **global** differential geometry; **global** diff geo studies how local <-> global.
@@ -597,6 +608,8 @@ hide: true
      - Reuse our current introduction.
 -->
 
+---
+hide: true
 ---
 
 Curvature extremas are useful!

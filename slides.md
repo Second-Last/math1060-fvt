@@ -581,11 +581,11 @@ representation, which is easily determined during the matching process
 <div style="display: flex; gap: 1rem; align-items: center;">
 <div style="text-align: center;">
 <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Original</p>
-<img src="./images/Scissors.jpeg" style="width: 150px;" />
+<img src="./images/Scissors.jpeg" style="width: 200px;" />
 </div>
 <div style="text-align: center;">
 <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Rotated 90°</p>
-<img src="./images/Scissors_Rotated.jpeg" style="width: 120px;" />
+<img src="./images/Scissors_Rotated.jpeg" style="height: 200px;" />
 </div>
 </div>
 

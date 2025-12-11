@@ -16,6 +16,18 @@ and its applications in object recognition.
 
 Presented by Jue Han, Gavin Zhao
 
+<div w-full absolute bottom-0 right-2 flex items-center>
+  <div w-full flex items-center justify-end gap-4>
+
+  <div i-ri:github-fill />
+
+  [Slides](https://github.com/second-last/math1060-fvt)
+
+  [Visualization](https://github.com/amk09/CSS-Object-Recognition)
+
+  </div>
+</div>
+
 ---
 hide: true
 ---

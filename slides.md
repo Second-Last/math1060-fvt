@@ -737,3 +737,11 @@ FVT provides motivation to study curvature extremas for CV.
 <!-- TODO(gz): show them side by side in a row -->
 <!-- ![](./images/fish_css.png) -->
 ![](./images/fish_contour_with_css.png){width=650px}
+
+---
+
+# References
+
+- F. Mokhatarian and H. Murase, "Silhouette-based object recognition through curvature scale space," 1993 (4th) International Conference on Computer Vision, Berlin, Germany, 1993, pp. 269-274, doi: 10.1109/ICCV.1993.378207.
+- F. Mokhtarian, "Silhouette-based isolated object recognition through curvature scale space," in IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 17, no. 5, pp. 539-544, May 1995, doi: 10.1109/34.391387.
+- Abbasi, S., Mokhtarian, F. & Kittler, J. Curvature scale space image in shape similarity retrieval. Multimedia Systems 7, 467–476 (1999). https://doi.org/10.1007/s005300050147

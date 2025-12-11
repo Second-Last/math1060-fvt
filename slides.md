@@ -319,22 +319,30 @@ where $\sigma$ is the standard deviation.
   </div>
   <div class="text-sm" style="padding-top: 0rem;">
     <div>
-      <h3 style="margin-bottom: 0.3rem; font-weight: bold;">The Convolution (⊗) Process </h3>
+      <h3 style="margin-bottom: 0.3rem; font-weight: bold;">Understanding Convolution (⊗)</h3>
+      <p style="margin-bottom: 0.8rem; font-size: 0.85rem;">
+        <strong>Convolution</strong> is a mathematical operation that combines two functions. For smoothing, we "slide" a kernel (weight function) across our data, computing weighted averages at each position:
+      </p>
+      <p style="margin-bottom: 1.2rem; font-size: 0.8rem; background: #f0f0f0; padding: 0.5rem; border-radius: 4px;">
+        At each point, look at a neighborhood → multiply each neighbor by the kernel weight → sum up all these weighted values → this becomes the new smoothed value at that point.
+      </p>
       <p style="margin-bottom: 1.5rem; font-size: 0.85rem;">
-        The 2D Gaussian kernel g<sub>σ</sub>(x, y) forms a bell-shaped "hill" where the <strong>center has the highest weight</strong>. This represents how much each neighboring pixel contributes to the smoothed value. When we convolve the curve with this kernel, each point becomes a <strong>weighted average</strong> of its neighbors—closer points contribute more, distant points contribute less.
+        The 2D Gaussian kernel g<sub>σ</sub>(x, y) forms a bell-shaped "hill" where the <strong>center has the highest weight</strong>. When we convolve with this kernel, each point becomes a <strong>weighted average</strong> of its neighbors—closer points contribute more, distant points contribute less.
       </p>
     </div>
-    <div>
-      <h3 style="margin-bottom: 0.1rem; font-size: 0.8rem; line-height: 1.1;">σ = 1.0 (Small)</h3>
-      <p style="margin-bottom: 0.5rem; font-size: 0.65rem; line-height: 1.2;">Narrow kernel: only nearby pixels have significant weights. Preserves fine details while averaging out tiny noise.</p>
-    </div>
-    <div>
-      <h3 style="margin-bottom: 0.1rem; font-size: 0.8rem; line-height: 1.1;">σ = 5.0 (Medium)</h3>
-      <p style="margin-bottom: 0.5rem; font-size: 0.65rem; line-height: 1.2;">Wider kernel: weights spread further. Each point averages over a larger neighborhood, smoothing out bumps and irregularities.</p>
-    </div>
-    <div>
-      <h3 style="margin-bottom: 0.1rem; font-size: 0.8rem; line-height: 1.1;">σ = 10.0 (Large)</h3>
-      <p style="font-size: 0.65rem; line-height: 1.2;">Very wide kernel: weights extend far. Heavy averaging over large neighborhoods leaves only the essential overall shape.</p>
+    <div style="margin-top: 0.5rem; display: flex; gap: 1rem;">
+      <div style="flex: 1;">
+        <h3 style="margin-bottom: 0.2rem; font-size: 0.7rem; line-height: 1.0;">σ = 1.0</h3>
+        <p style="font-size: 0.55rem; line-height: 1.1;">Narrow kernel: preserves fine details.</p>
+      </div>
+      <div style="flex: 1;">
+        <h3 style="margin-bottom: 0.2rem; font-size: 0.7rem; line-height: 1.0;">σ = 5.0</h3>
+        <p style="font-size: 0.55rem; line-height: 1.1;">Wider kernel: smooths bumps.</p>
+      </div>
+      <div style="flex: 1;">
+        <h3 style="margin-bottom: 0.2rem; font-size: 0.7rem; line-height: 1.0;">σ = 10.0</h3>
+        <p style="font-size: 0.55rem; line-height: 1.1;">Very wide: essential shape only.</p>
+      </div>
     </div>
   </div>
 </div>
@@ -492,38 +500,71 @@ Prepared:
 layout: two-cols-header
 ---
 
-# Demo 1: Blurred
+# Demo 1: Blurred 
 
 ::left::
 
 Original:
 ![](./images/Fork.jpeg)
 
+CSS representation:
+![](./images/Fork_css.png){width=250px}
+
 ::right::
 
 Blurred:
 ![](./images/Fork_Blurred.jpeg)
+
+CSS representation:
+![](./images/Fork_Blurred_css.png){width=250px}
+
+<div class="absolute bottom-4 right-4 text-sm">
+  <a href="https://github.com/amk09/CSS-Object-Recognition" target="_blank" class="text-blue-600 hover:underline">
+    Live demo available at GitHub →
+  </a>
+</div>
 
 
 ---
 layout: two-cols-header
 ---
 
-# Demo 2: Scaling
+# Demo 2: Scaling 
 
 Due to paramterization by arc length and normalization to $[0, 1]$, scaling
 doesn't change the representation.
 
 ::left::
 
-Original:
-![](./images/Panda.png){width=200px}
+<div style="display: flex; gap: 1rem; align-items: center;">
+<div style="text-align: center;">
+<p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Original</p>
+<img src="./images/Panda.png" style="width: 150px;" />
+</div>
+<div style="text-align: center;">
+<p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Shrunk 75%</p>
+<img src="./images/Panda_Shrunk.jpeg" style="width: 112px;" />
+</div>
+</div>
 
 ::right::
 
-Shrunk by 75%:
+<div style="display: flex; gap: 1rem; align-items: center;">
+<div style="text-align: center;">
+<p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Original CSS</p>
+<img src="./images/Panda_css.png" style="width: 200px;" />
+</div>
+<div style="text-align: center;">
+<p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Shrunk CSS</p>
+<img src="./images/Panda_Shrunk_css.png" style="width: 200px;" />
+</div>
+</div>
 
-![](./images/Panda_Shrunk.jpeg){width=150px}
+<div class="absolute bottom-4 right-4 text-sm">
+  <a href="https://github.com/amk09/CSS-Object-Recognition" target="_blank" class="text-blue-600 hover:underline">
+    Live demo available at GitHub →
+  </a>
+</div>
 
 ---
 layout: two-cols-header
@@ -537,13 +578,35 @@ representation, which is easily determined during the matching process
 
 ::left::
 
-Original:
-![](./images/Scissors.jpeg)
+<div style="display: flex; gap: 1rem; align-items: center;">
+<div style="text-align: center;">
+<p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Original</p>
+<img src="./images/Scissors.jpeg" style="width: 150px;" />
+</div>
+<div style="text-align: center;">
+<p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Rotated 90°</p>
+<img src="./images/Scissors_Rotated.jpeg" style="width: 120px;" />
+</div>
+</div>
 
 ::right::
 
-Rotated by 90 degrees:
-![](./images/Scissors_Rotated.jpeg){width=150px}
+<div style="display: flex; gap: 1rem; align-items: center;">
+<div style="text-align: center;">
+<p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Original CSS</p>
+<img src="./images/Scissors_css.png" style="width: 200px;" />
+</div>
+<div style="text-align: center;">
+<p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Rotated CSS</p>
+<img src="./images/Scissors_Rotated_css.png" style="width: 200px;" />
+</div>
+</div>
+
+<div class="absolute bottom-4 right-4 text-sm">
+  <a href="https://github.com/amk09/CSS-Object-Recognition" target="_blank" class="text-blue-600 hover:underline">
+    Live demo available at GitHub →
+  </a>
+</div>
 
 ---
 
@@ -620,6 +683,12 @@ We implemented a simple least-squares algorithm for calculating similarities
 between two CSS graphs. And it already works!
 
 ![](./images/Fork_Query.png)
+
+<div class="absolute bottom-4 right-4 text-sm">
+  <a href="https://github.com/amk09/CSS-Object-Recognition" target="_blank" class="text-blue-600 hover:underline">
+    Live demo available at GitHub →
+  </a>
+</div>
 
 ---
 hide: true

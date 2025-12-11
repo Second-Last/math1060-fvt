@@ -57,7 +57,7 @@ Given the knowledge of many object images...
 
 <div v-click="3">
 
-And also an input image...**how do we recognize what the input image is?**
+Then we have an input image, **how do we recognize what the input image is?**
 
 </div>
 
@@ -79,7 +79,7 @@ And also an input image...**how do we recognize what the input image is?**
 
 <div v-click="7" class="text-sm mt-4">
 
-We recognize it instantly with our human brain. But as a computer, **where do we look** to understand and recognize it's a fork?
+We recognize it instantly with our human brain. Computers aren't this smart. So if we really think about it, **where do we look** to understand and recognize it's a fork? 
 
 </div>
 
@@ -224,7 +224,7 @@ More precisely:
 
 <div v-click="6">
 
-So let's just store every point with its curvautre and compare! ..Well
+So let's just store every point on the curve with its curvautre and compare! ..Well
 </div>
 
 ---
@@ -233,10 +233,11 @@ So let's just store every point with its curvautre and compare! ..Well
 
 Using curvature features is promising, but we need them to be **robust** to common image transformations.
 
-**The problem:** If we store curvature extrema as $(x, y, \kappa)$ coordinates:
+**The problem:** If we store each point as $(x, y, \kappa)$ coordinates:
 - Rotating the fork → all $(x, y)$ coordinates change
 - Translating the fork → all $(x, y)$ coordinates change
 - The **same object** would have **different signatures**!
+<div v-click="1">
 
 **The solution:** Make our representation **invariant** to rigid motions:
 
@@ -244,7 +245,7 @@ Using curvature features is promising, but we need them to be **robust** to comm
 2. **Normalize the domain** to $[0, 1]$ (scale-invariant)
 
 Now the same fork always has the same signature, regardless of position, rotation, or scale!
-
+</div>
 ---
 
 # Challenge #2: Standard Curvature Loses Direction Information
@@ -252,6 +253,7 @@ Now the same fork always has the same signature, regardless of position, rotatio
 For object recognition, we need to tell apart curves that bend **inward** vs **outward**.
 
 **The problem:** Standard curvature $\kappa(u) = |c''(u)|$ we learnt in class is always **positive** — it only tells us *how much* a curve bends, not *which direction*.
+<div v-click="1">
 
 **The solution:** Use **signed curvature** to capture the direction of bending.
 
@@ -270,7 +272,7 @@ $$
 $$
 
 Now: **positive** = bending left (convex), **negative** = bending right (concave).
-
+</div>
 ---
 
 # Challenge #3: Real-World Noise and Scale Variation
@@ -279,13 +281,51 @@ This isn't the perfect world of MA1060 anymore :( Noise is everywhere!
 
 Say you're taking a picture with a crappy camera, and your hand is shaking a lot. You might get a pretty unsatisfying input picture. What do we do to de-noise it?
 
-One classic approach in Computer Vision is to apply a smoothing filter. **Gaussian filter** is a popular choice.
+<div v-click="1">
+
+One classic approach in Computer Vision is to apply a smoothing filter. **Gaussian filter** is a popular choice. The gaussian kernel is defined as
 
 $$g_\sigma(x, y) = \frac{1}{2\pi\sigma^2}e^{-(x^2+y^2)/(2\sigma^2)}$$ 
 
 where $\sigma$ is the standard deviation.
+</div>
+
+<div v-click="2">
 
 <img src="./images/gaussian_filter_sigma_5.0.png" style="width: 80%; height: auto;" />
+</div>
+
+---
+
+# Gaussian Smoothing: Multi-Scale View
+
+<div class="grid grid-cols-2 gap-8">
+  <div>
+    <img src="./images/gaussian_filter_sigma_1.0.png" style="width: 100%; height: auto;" />
+    <img src="./images/gaussian_filter_sigma_5.0.png" style="width: 100%; height: auto; margin-top: 1rem;" />
+    <img src="./images/gaussian_filter_sigma_10.0.png" style="width: 100%; height: auto; margin-top: 1rem;" />
+  </div>
+  <div class="text-sm" style="padding-top: 0rem;">
+    <div>
+      <h3 style="margin-bottom: 0.3rem; font-weight: bold;">The Convolution (⊗) Process </h3>
+      <p style="margin-bottom: 1.5rem; font-size: 0.85rem;">
+        The 2D Gaussian kernel g<sub>σ</sub>(x, y) forms a bell-shaped "hill" where the <strong>center has the highest weight</strong>. This represents how much each neighboring pixel contributes to the smoothed value. When we convolve the curve with this kernel, each point becomes a <strong>weighted average</strong> of its neighbors—closer points contribute more, distant points contribute less.
+      </p>
+    </div>
+    <div>
+      <h3 style="margin-bottom: 0.1rem; font-size: 0.8rem; line-height: 1.1;">σ = 1.0 (Small)</h3>
+      <p style="margin-bottom: 0.5rem; font-size: 0.65rem; line-height: 1.2;">Narrow kernel: only nearby pixels have significant weights. Preserves fine details while averaging out tiny noise.</p>
+    </div>
+    <div>
+      <h3 style="margin-bottom: 0.1rem; font-size: 0.8rem; line-height: 1.1;">σ = 5.0 (Medium)</h3>
+      <p style="margin-bottom: 0.5rem; font-size: 0.65rem; line-height: 1.2;">Wider kernel: weights spread further. Each point averages over a larger neighborhood, smoothing out bumps and irregularities.</p>
+    </div>
+    <div>
+      <h3 style="margin-bottom: 0.1rem; font-size: 0.8rem; line-height: 1.1;">σ = 10.0 (Large)</h3>
+      <p style="font-size: 0.65rem; line-height: 1.2;">Very wide kernel: weights extend far. Heavy averaging over large neighborhoods leaves only the essential overall shape.</p>
+    </div>
+  </div>
+</div>
 
 ---
 
@@ -315,49 +355,102 @@ where $\sigma$ is the standard deviation.
 
 # Applying Smoothing to Curves
 
-Let's do some MA1060!
+<div class="grid grid-cols-2 gap-8">
+<div>
+<h3 style="margin-bottom: 1rem;">The Mathematical Framework</h3>
 
-For smoothing a curve, we can think of it as **evolving the curve** through a family of increasingly "regular" versions:
+<p style="margin-bottom: 1rem;">For smoothing a curve, we <strong>convolve</strong> it with a Gaussian kernel, creating a family of increasingly smooth versions:</p>
 
+<div style="background: #f5f5f5; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+    
 $$\gamma_\sigma(u) = \gamma(u) \otimes g_\sigma(u)$$
+    
+</div>
 
-<div style="text-align: center; margin-top: 2rem;">
+<p style="font-size: 0.9rem; margin-bottom: 0.8rem;">where:</p>
+<ul style="font-size: 0.85rem; line-height: 1.6;">
+<li><strong>γ(u)</strong> is the original curve</li>
+<li><strong>g<sub>σ</sub>(u)</strong> is the Gaussian kernel with scale σ</li>
+<li><strong>γ<sub>σ</sub>(u)</strong> is the smoothed curve at scale σ</li>
+<li><strong>⊗</strong> denotes convolution operation</li>
+</ul>
 
-**What smoothing a curve looks like:**
-
-<div style="display: flex; align-items: center; justify-content: center; gap: 1.5rem; margin-top: 1rem;">
-  <img src="./images/frame_0000.png" style="width: 30%; height: auto;" />
-  <div style="display: flex; flex-direction: column; align-items: center;">
-    <img src="./images/onlyG.png" style="width: 100px; height: auto; margin-bottom: 0.5rem;" />
-    <div style="font-size: 2.5rem;">→</div>
-  </div>
-  <img src="./images/frame_0008.png" style="width: 30%; height: auto;" />
+<div v-click="1" style="margin-top: 1rem; padding: 0.8rem; background: #e3f2fd; border-radius: 6px; font-size: 0.85rem;">
+<strong>Key idea:</strong> As σ increases, fine details disappear while the essential shape persists—perfect for multi-scale analysis!
 </div>
 </div>
+
+<div style="display: flex; flex-direction: column; justify-content: center;">
+<h3 style="margin-bottom: 1rem; text-align: center;">What smoothing a curve looks like:</h3>
+<div style="display: flex; align-items: center; justify-content: center; gap: 1rem;">
+<div style="text-align: center;">
+<img src="./images/frame_0000.png" style="width: 100%; max-width: 200px; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" />
+<p style="font-size: 0.8rem; margin-top: 0.5rem; color: #666;">Original curve γ(u)</p>
+</div>
+<div style="display: flex; flex-direction: column; align-items: center;">
+<img src="./images/onlyG.png" style="width: 80px; height: auto; margin-bottom: 0.3rem;" />
+<div style="font-size: 2rem;">→</div>
+<p style="font-size: 0.75rem; margin-top: 0.3rem; color: #666;"></p>
+</div>
+<div style="text-align: center;">
+<img src="./images/frame_0008.png" style="width: 100%; max-width: 200px; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" />
+<p style="font-size: 0.8rem; margin-top: 0.5rem; color: #666;">Smoothed γ<sub>σ</sub>(u)</p>
+</div>
+</div>
+
+<div v-click="2" style="margin-top: 2rem; text-align: center;">
+<img src="./images/kk100_converted_animation.gif" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);" />
+<p style="font-size: 0.75rem; margin-top: 0.5rem; color: #666;">Animation: curve evolving as σ increases</p>
+</div>
+</div>
+</div>
+
+<!-- --- -->
+
+<!-- # From Pixels to Curves
+
+**The discrete-continuous gap:** Images are pixels, but differential geometry works with smooth curves.
+
+We detect boundary **discontinuities** between pixels—giving us discrete points, not a function $\gamma(t)$.
+
+**Key insight:** Computing curvatures **constructs a parameterization** from discrete data:
+
+$$\text{Discrete pixels} \longrightarrow \gamma(u) \longrightarrow \kappa(u) \longrightarrow \text{CSS}$$
+
+This bridges computer vision's discrete world to the continuous framework of MA1060. -->
 
 ---
 
 # Curvature Scale Space (CSS)
 
+<div class="grid grid-cols-2 gap-6">
+<div style="font-size: 0.9rem;">
+
 Now we track how curvature zero-crossings evolve as we smooth the curve.
 
-**Formal definition:** The CSS representation of a plane curve $\gamma$ is the set:
+**Formal definition:** The CSS representation of a plane curve $\gamma$ is:
 
-$$\text{CSS}(\gamma) = \{(u, \sigma) \in [0,1] \times \mathbb{R}^+ \mid \kappa_\sigma(u) = 0\}$$
+$$\text{CSS}(\gamma) = \{(u, \sigma) \mid \kappa_\sigma(u) = 0\}$$
 
-where:
-- $u \in [0,1]$ is the normalized arc-length parameter
-- $\sigma \in \mathbb{R}^+$ is the Gaussian smoothing scale
-- $\kappa_\sigma(u)$ is the signed curvature after smoothing with $g_\sigma$
+where $u \in [0,1]$ is arc-length, $\sigma \in \mathbb{R}^+$ is gaussian filter width, and $\kappa_\sigma(u)$ is signed curvature.
 
-**As an image:** We can represent CSS as a binary matrix $M \in \{0,1\}^{n \times m}$ where:
+**As an image:** Binary matrix $M \in \{0,1\}^{n \times m}$:
 
 $$M_{ij} = \begin{cases} 
 1 & \text{if } \kappa_{\sigma_i}(u_j) = 0 \\
 0 & \text{otherwise}
 \end{cases}$$
 
-This $(u, \sigma)$-space "image" captures the curve's multi-scale geometric structure!
+This $(u, \sigma)$-space captures multi-scale structure!
+
+To better understand it, let's look at the live demo. 
+</div>
+
+<div style="display: flex; flex-direction: column; justify-content: center;">
+<img src="./images/kk100_converted_css.png" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);" />
+<p style="font-size: 0.75rem; margin-top: 0.5rem; text-align: center; color: #666;">fish example: u-axis (arc length) vs σ-axis (smoothing)</p>
+</div>
+</div>
 
 <!-- Show the live demo of a fish and move the slider to some boundaries -->
 
@@ -460,17 +553,52 @@ CSS for Computer Vision $\approx$ FTC for Differential Geometry — both tell us
 
 # Returning to the Initial Question
 
-Now we have a robust representation of the curve, the high-level process
-becomes:
+Now we have a robust representation of the curve, the high-level process becomes:
 
 1. Extract boundaries (the curve) from an image.
 2. Calculate the CSS representation.
-3. Perform some black-box candidate selection algorithm to find the closest
-   curve in the bank.
+3. Perform some black-box candidate selection algorithm to find the closest curve in the bank.
 
-   <!-- Shrink this text to footnote style !-->
-   _(there are many algorithms for this; which one is the best and most computationally
-   efficient is an active area of Computer Vision research)_
+<p style="font-size: 0.85rem; color: #666; font-style: italic; margin-top: 0.5rem;">
+(there are many algorithms for this; which one is the best and most computationally efficient is an active area of Computer Vision research)
+</p>
+
+<div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 2rem;">
+  <div style="text-align: center;">
+    <img src="./images/forkd.png" style="width: 150px; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" />
+    <p style="font-size: 0.75rem; margin-top: 0.5rem; color: #666;">Input image</p>
+  </div>
+  
+  <div style="display: flex; flex-direction: column; align-items: center;">
+    <div style="font-size: 1.5rem; font-weight: bold;">1</div>
+    <div style="font-size: 1.5rem;">→</div>
+  </div>
+  
+  <div style="text-align: center;">
+    <img src="./images/forkd_contour.png" style="width: 150px; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" />
+    <p style="font-size: 0.75rem; margin-top: 0.5rem; color: #666;">Extract boundary</p>
+  </div>
+  
+  <div style="display: flex; flex-direction: column; align-items: center;">
+    <div style="font-size: 1.5rem; font-weight: bold;">2</div>
+    <div style="font-size: 1.5rem;">→</div>
+  </div>
+  
+  <div style="text-align: center;">
+    <img src="./images/forkd_css.png" style="width: 150px; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" />
+    <p style="font-size: 0.75rem; margin-top: 0.5rem; color: #666;">Calculate CSS</p>
+  </div>
+  
+  <div style="display: flex; flex-direction: column; align-items: center;">
+    <div style="font-size: 1.5rem; font-weight: bold;">3</div>
+    <div style="font-size: 1.5rem;">→</div>
+  </div>
+  
+  <div style="text-align: center;">
+    <img src="./images/fork_query.png" style="width: 150px; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" />
+    <p style="font-size: 0.75rem; margin-top: 0.5rem; color: #666;">Match & identify</p>
+  </div>
+</div>
 
 ---
 
@@ -726,17 +854,19 @@ FVT provides motivation to study curvature extremas for CV.
 
 # Conclusion
 
-- The CSS plot is a unique representation of an object (up to rigid motion,
-  scaling, and noise) using the zero-crossings of the curvature.
+**Curvature determines shape.**
 
-- The effectiveness of CSS can be roughly understood
-  using the Fundamental Theorem of Plane Curves.
+Just as the Fundamental Theorem of Plane Curves tells us that curvature completely characterizes a curve, **Curvature Scale Space** shows us how to make this idea robust and practical in real world:
 
-- We can utilize CSS to build up an object recognition system.
+- **Signed curvature** distinguishes convex from concave
+- **Arc-length parameterization** gives invariance to transformations  
+- **Multi-scale analysis** handles real-world noise
 
-<!-- TODO(gz): show them side by side in a row -->
-<!-- ![](./images/fish_css.png) -->
-![](./images/fish_contour_with_css.png){width=650px}
+<div style="text-align: center; margin-top: 2rem;">
+
+![](./images/fish_contour_with_css.png){width=400px}
+
+</div>
 
 ---
 

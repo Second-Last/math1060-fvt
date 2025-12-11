@@ -363,21 +363,6 @@ This $(u, \sigma)$-space "image" captures the curve's multi-scale geometric stru
 
 ---
 
-# CSS as a Geometric Signature
-
-**Why is CSS a good signature for object boundaries?**
-
-Think back to the Fundamental Theorem of Curves: a regular curve with non-zero curvature is completely determined by its curvature function.
-
-CSS extends this idea to be **robust across transformations**:
-- **Invariant to** rigid motion, scaling (from our arc-length parameterization)
-- **Robust to** noise (through multi-scale smoothing)
-- **Captures** essential geometric features at different scales
-
-CSS for Computer Vision ≈ FTC for Differential Geometry — both tell us curvature determines shape!
-
----
-
 # Does CSS Really Work?
 
 Let's test if CSS signatures are resilient to the transformations we care about:
@@ -399,12 +384,102 @@ Prepared:
 -->
 
 ---
+layout: two-cols-header
+---
+
+# Demo 1: Blurred
+
+::left::
+
+Original:
+![](./images/Fork.jpeg)
+
+::right::
+
+Blurred:
+![](./images/Fork_Blurred.jpeg)
+
+
+---
+layout: two-cols-header
+---
+
+# Demo 2: Scaling
+
+Due to paramterization by arc length and normalization to $[0, 1]$, scaling
+doesn't change the representation.
+
+::left::
+
+Original:
+![](./images/Panda.png){width=200px}
+
+::right::
+
+Shrunk by 75%:
+
+![](./images/Panda_Shrunk.jpeg){width=150px}
+
+---
+layout: two-cols-header
+---
+
+# Demo 3: Rotation
+
+A rotation of the object usually causes a circular shift on its
+representation, whihc is easily determined during the matching process
+(Abbasi, et. al).
+
+::left::
+
+Original:
+![](./images/Scissors.jpeg)
+
+::right::
+
+Rotated by 90 degrees:
+![](./images/Scissors_Rotated.jpeg){width=150px}
+
+---
+
+# CSS as a Geometric Signature
+
+**Why is CSS a good signature for object boundaries?**
+
+Think back to the Fundamental Theorem of (Plane) Curves: a regular plane
+curve with non-zero curvature is completely determined by its curvature function.
+
+CSS extends this idea to be **robust across transformations**:
+- **Invariant to** rigid motion, scaling (from our arc-length parameterization)
+- **Robust to** noise (through multi-scale smoothing)
+- **Captures** essential geometric features at different scales
+
+CSS for Computer Vision $\approx$ FTC for Differential Geometry — both tell us curvature determines shape!
+
+---
 
 # Returning to the Initial Question
 
-How do we recognize an object from a bank of objects?
+Now we have a robust representation of the curve, the high-level process
+becomes:
 
-1. 
+1. Extract boundaries (the curve) from an image.
+2. Calculate the CSS representation.
+3. Perform some black-box candidate selection algorithm to find the closest
+   curve in the bank.
+
+   <!-- Shrink this text to footnote style !-->
+   _(there are many algorithms for this; which one is the best and most computationally
+   efficient is an active area of Computer Vision research)_
+
+---
+
+# Final Demo
+
+We implemented a simple least-squares algorithm for calculating similarities
+between two CSS graphs. And it already works!
+
+![](./images/Fork_Query.png)
 
 ---
 hide: true
@@ -648,5 +723,17 @@ Because of FVT, we know we can use these results on any simple, ..., curve!
 FVT provides motivation to study curvature extremas for CV.
 
 ---
-src: ./pages/outro.md
----
+
+# Conclusion
+
+- The CSS plot is a unique representation of an object (up to rigid motion,
+  scaling, and noise) using the zero-crossings of the curvature.
+
+- The effectiveness of CSS can be roughly understood
+  using the Fundamental Theorem of Plane Curves.
+
+- We can utilize CSS to build up an object recognition system.
+
+<!-- TODO(gz): show them side by side in a row -->
+<!-- ![](./images/fish_css.png) -->
+![](./images/fish_contour_with_css.png){width=650px}

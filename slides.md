@@ -460,9 +460,9 @@ To better understand it, let's look at the live demo.
 
 Let's test if CSS signatures are resilient to the transformations we care about:
 
-- Rigid motion
-- Scaling
 - Noise
+- Scaling
+- Rigid motion
 
 Let's show (using examples) that in all three of the cases, the CSS image stays
 essentially unmodified!
@@ -520,7 +520,7 @@ layout: two-cols-header
 # Demo 3: Rotation
 
 A rotation of the object usually causes a circular shift on its
-representation, whihc is easily determined during the matching process
+representation, which is easily determined during the matching process
 (Abbasi, et. al).
 
 ::left::
